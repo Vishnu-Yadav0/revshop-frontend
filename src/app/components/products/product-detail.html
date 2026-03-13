@@ -12,7 +12,7 @@
             <!-- Product Images -->
             <div class="col-lg-6">
                 <!-- Main Image with Zoom -->
-                <div class="card border-0 shadow-sm rounded-4 p-5 text-center bg-body position-relative overflow-hidden zoom-container"
+                <div class="card border-0 shadow-sm rounded-4 position-relative overflow-hidden zoom-container"
                     (mousemove)="onMouseMove($event)" (mouseenter)="toggleZoom(true)" (mouseleave)="toggleZoom(false)">
                     <img [src]="allImages().length > 0 ? allImages()[currentImageIndex()] : 'https://placehold.co/600x400?text=No+Image'"
                         class="img-fluid main-product-image" [alt]="product()?.name"

@@ -451,6 +451,11 @@
     color: #f59e0b;
 }
 
+.status-out-for-delivery {
+    background: rgba(255, 126, 0, 0.15);
+    color: #ff7e00;
+}
+
 .status-shipped {
     background: rgba(59, 130, 246, 0.15);
     color: #60a5fa;

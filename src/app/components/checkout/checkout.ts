@@ -276,8 +276,8 @@ export class CheckoutComponent implements OnInit {
                     this.submitting = false;
                     this.notificationService.triggerRefresh();
                     // Clear cart properly after order
-                    if (this.isBuyNow && this.buyNowCartItemId) {
-                        this.cartService.removeItemFromCart(this.buyNowCartItemId).subscribe({
+                    if (this.isBuyNow && this.buyNowProductId) {
+                        this.cartService.removeItemFromCart(userId, this.buyNowProductId).subscribe({
                             next: () => this.router.navigate(['/orders']),
                             error: () => this.router.navigate(['/orders'])
                         });
@@ -364,8 +364,8 @@ export class CheckoutComponent implements OnInit {
                 this.notificationService.triggerRefresh();
 
                 const userId = Number(localStorage.getItem('userId'));
-                if (this.isBuyNow && this.buyNowCartItemId) {
-                    this.cartService.removeItemFromCart(this.buyNowCartItemId).subscribe({
+                if (this.isBuyNow && this.buyNowProductId) {
+                    this.cartService.removeItemFromCart(userId, this.buyNowProductId).subscribe({
                         next: () => setTimeout(() => this.router.navigate(['/orders']), 1500),
                         error: () => setTimeout(() => this.router.navigate(['/orders']), 1500)
                     });

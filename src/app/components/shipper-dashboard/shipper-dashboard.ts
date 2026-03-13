@@ -98,7 +98,9 @@ export class ShipperDashboardComponent implements OnInit {
     }
 
     getNextStatus(currentStatus: string): { label: string; value: string; color: string } | null {
-        switch (currentStatus) {
+        if (!currentStatus) return null;
+        const status = currentStatus.trim().toUpperCase();
+        switch (status) {
             case 'PROCESSING': return { label: 'Mark as Picked Up', value: 'SHIPPED', color: 'blue' };
             case 'SHIPPED': return { label: 'Out for Delivery', value: 'OUT_FOR_DELIVERY', color: 'orange' };
             case 'OUT_FOR_DELIVERY': return { label: 'Mark as Delivered', value: 'DELIVERED', color: 'green' };
@@ -110,7 +112,7 @@ export class ShipperDashboardComponent implements OnInit {
         switch (status) {
             case 'PROCESSING': return 'status-processing';
             case 'SHIPPED': return 'status-shipped';
-            case 'OUT_FOR_DELIVERY': return 'status-shipped'; // Reuse shipped color
+            case 'OUT_FOR_DELIVERY': return 'status-out-for-delivery';
             case 'DELIVERED': return 'status-delivered';
             case 'CANCELLED': return 'status-cancelled';
             default: return 'status-pending';

@@ -1,0 +1,132 @@
+/* ===== Tracking Drawer UI ===== */
+.tracking-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(15, 23, 42, 0.4); /* Tailwind slate-900 with opacity */
+    backdrop-filter: blur(4px);
+    z-index: 1050;
+    animation: fadeIn 0.3s ease forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.tracking-drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    max-width: 440px;
+    height: 100vh;
+    background-color: #ffffff;
+    box-shadow: -4px 0 24px rgba(0, 0, 0, 0.1);
+    z-index: 1060;
+    display: flex;
+    flex-direction: column;
+    transform: translateX(100%);
+    animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes slideIn {
+    to { transform: translateX(0); }
+}
+
+.drawer-header {
+    padding: 1.25rem 1.5rem;
+    background-color: #ffffff;
+}
+
+.drawer-body {
+    flex: 1;
+    overflow-y: auto;
+    background-color: #f8fafc; /* Very light slate background */
+}
+
+/* Custom Scrollbar */
+.drawer-body::-webkit-scrollbar {
+    width: 6px;
+}
+.drawer-body::-webkit-scrollbar-thumb {
+    background-color: #cbd5e1;
+    border-radius: 10px;
+}
+
+/* Icons */
+.icon-circle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+.bg-primary-subtle { background-color: #e0e7ff; }
+.text-primary { color: #4f46e5 !important; border-color: #4f46e5 !important; }
+
+/* Shipper Card */
+.shipper-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+}
+.tracking-wider {
+    letter-spacing: 0.05em;
+}
+
+/* Timeline */
+.tracking-history-timeline {
+    position: relative;
+    padding-left: 1rem;
+}
+
+.timeline-step {
+    position: relative;
+    display: flex;
+    gap: 1.25rem;
+}
+
+/* The left indicator track */
+.timeline-indicator {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 16px;
+}
+
+/* The dot */
+.timeline-indicator .dot {
+    width: 12px;
+    height: 12px;
+    background-color: #e2e8f0;
+    border: 2px solid #ffffff;
+    border-radius: 50%;
+    z-index: 2;
+    box-shadow: 0 0 0 2px #e2e8f0; /* Outer ring */
+}
+
+/* The active dot */
+.timeline-indicator .dot-active {
+    background-color: #4f46e5;
+    box-shadow: 0 0 0 3px #e0e7ff;
+}
+
+/* The vertical line connection */
+.timeline-indicator .line {
+    flex: 1;
+    width: 2px;
+    background-color: #e2e8f0;
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
+/* Content spacing */
+.timeline-content {
+    flex: 1;
+    padding-bottom: 1.5rem;
+}

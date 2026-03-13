@@ -53,7 +53,7 @@
                 <ng-container
                     *ngFor="let step of ['Ordered','Processing','Shipped','Out for Delivery','Delivered']; let i = index">
                     <div class="step-item" [class.step-done]="!isCancelled() && getStatusIndex(order().status) >= i"
-                        [class.step-active]="!isCancelled() && getStatusIndex(order().status) === i"
+                        [class.step-active]="!isCancelled() && getStatusIndex(order().status) === i && order().status?.toUpperCase() !== 'DELIVERED'"
                         [class.step-cancelled]="isCancelled()">
                         <div class="step-circle">
                             <span *ngIf="!isCancelled() && getStatusIndex(order().status) >= i">✓</span>

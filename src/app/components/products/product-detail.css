@@ -27,18 +27,24 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: var(--bs-body-bg);
+    background-color: var(--bs-tertiary-bg);
+    padding: 2rem;
+    overflow: hidden;
 }
 
 .main-product-image {
     max-height: 100%;
     max-width: 100%;
+    width: auto;
+    height: auto;
     object-fit: contain;
-    transition: transform 0.2s ease-out;
+    /* Removed transition to prevent glitching during mouse move */
+    transition: transform 0.1s ease-out, opacity 0.3s ease;
+    pointer-events: none; /* Let container handle events */
 }
 
 .main-product-image.zoomed {
-    transform: scale(2.5);
+    transform: scale(2);
 }
 
 .hover-lift {

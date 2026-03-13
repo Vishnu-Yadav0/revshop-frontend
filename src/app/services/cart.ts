@@ -37,12 +37,13 @@ export class CartService {
         return this.http.post<ApiResponse<any>>(`${this.apiUrl}/user/${userId}/add`, body);
     }
 
-    updateItemQuantity(cartItemId: number, quantity: number): Observable<ApiResponse<any>> {
-        return this.http.put<ApiResponse<any>>(`/api/cart-items/${cartItemId}`, { quantity });
+    updateItemQuantity(userId: number, productId: number, quantity: number): Observable<ApiResponse<any>> {
+        const body = { productId, quantity };
+        return this.http.put<ApiResponse<any>>(`${this.apiUrl}/user/${userId}/update`, body);
     }
 
-    removeItemFromCart(cartItemId: number): Observable<ApiResponse<any>> {
-        return this.http.delete<ApiResponse<any>>(`/api/cart-items/${cartItemId}`);
+    removeItemFromCart(userId: number, productId: number): Observable<ApiResponse<any>> {
+        return this.http.delete<ApiResponse<any>>(`${this.apiUrl}/user/${userId}/remove/${productId}`);
     }
 
     clearCart(userId: number): Observable<ApiResponse<void>> {

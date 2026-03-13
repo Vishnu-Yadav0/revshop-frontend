@@ -77,38 +77,48 @@
                         <span class="small ms-2 ms-lg-0">Alerts</span>
                     </a>
 
+                    <!-- Full Screen Overlay for mobile/click outside -->
+                    <div class="notification-overlay" *ngIf="showNotifications()" (click)="showNotifications.set(false)"></div>
+
                     <!-- Notification Dropdown -->
-                    <div class="notification-dropdown position-absolute end-0 mt-2 p-0 z-3" *ngIf="showNotifications()"
-                        style="top: 100%;">
-                        <div class="d-flex justify-content-between align-items-center p-3 border-bottom"
-                            style="border-color: var(--border-color) !important;">
-                            <span class="dropdown-header fw-bold p-0">Notifications</span>
-                            <span class="mark-all-btn small text-warning" *ngIf="unreadCount() > 0"
+                    <div class="notification-dropdown position-absolute end-0 mt-2 p-0 z-3" *ngIf="showNotifications()">
+                        <div class="d-flex justify-content-between align-items-center p-3 border-bottom dropdown-header-container">
+                            <span class="dropdown-header fw-bold p-0 mb-0 text-dark fs-6">Alerts</span>
+                            <span class="mark-all-btn small" *ngIf="unreadCount() > 0"
                                 (click)="markAllRead()">
                                 Mark all read
                             </span>
                         </div>
 
-                        <div *ngIf="notifications().length === 0" class="text-center py-4 px-3">
-                            <i class="fa-solid fa-bell-slash fs-3 text-muted mb-2 d-block"></i>
-                            <p class="text-muted small mb-0">No notifications</p>
+                        <div *ngIf="notifications().length === 0" class="text-center py-5 px-3">
+                            <i class="fa-regular fa-bell-slash fs-1 text-muted mb-3 d-block opacity-50"></i>
+                            <p class="text-muted fw-medium mb-0">You're all caught up!</p>
+                            <p class="text-muted small mt-1">No new notifications to show.</p>
                         </div>
 
-                        <div *ngFor="let notif of notifications()" class="notification-item"
-                            [class.unread]="!notif.isRead">
-                            <a class="dropdown-item py-2 px-3 d-flex gap-2 align-items-start"
-                                style="cursor:pointer;white-space:normal;"
-                                (click)="markAsRead(notif.notificationId, notif)">
-                                <i class="fa-solid fa-circle notification-icon mt-1" [style.font-size]="'0.5rem'"
-                                    [style.color]="notif.isRead ? 'transparent' : '#ffc107'"></i>
-                                <div class="flex-grow-1">
-                                    <div class="fw-bold small" style="color: var(--text-primary);">{{ notif.title }}</div>
-                                    <div class="small" style="color: var(--text-secondary);">{{ notif.message }}</div>
-                                    <div class="small mt-1" style="color: var(--text-secondary); opacity: 0.8;">
-                                        {{ notif.createdAt | date:'short' }}
+                        <div class="notification-list">
+                            <div *ngFor="let notif of notifications()" class="notification-item"
+                                [class.unread]="!notif.isRead">
+                                <a class="dropdown-item py-3 px-3 d-flex gap-3 align-items-start"
+                                    (click)="markAsRead(notif.notificationId, notif)">
+                                    
+                                    <div class="icon-circle" [ngClass]="notif.type === 'ORDER' ? 'bg-primary-subtle text-primary' : 'bg-secondary-subtle text-secondary'">
+                                        <i class="fa-solid fa-box" *ngIf="notif.type === 'ORDER'"></i>
+                                        <i class="fa-solid fa-bell" *ngIf="notif.type !== 'ORDER'"></i>
                                     </div>
-                                </div>
-                            </a>
+                                    
+                                    <div class="flex-grow-1">
+                                        <div class="d-flex justify-content-between align-items-center mb-1">
+                                            <span class="fw-bold notification-title">{{ notif.title }}</span>
+                                            <i class="fa-solid fa-circle text-primary unread-dot" *ngIf="!notif.isRead"></i>
+                                        </div>
+                                        <div class="notification-message">{{ notif.message }}</div>
+                                        <div class="notification-time mt-2">
+                                            {{ notif.createdAt | date:'MMM d, y, h:mm a' }}
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </li>

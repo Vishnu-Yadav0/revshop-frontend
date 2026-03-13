@@ -285,7 +285,7 @@
                                     <span class="badge rounded-pill px-3" [ngClass]="{
                                             'bg-warning-subtle text-warning': order.status === 'PENDING',
                                             'bg-info-subtle text-info': order.status === 'PROCESSING',
-                                            'bg-primary-subtle text-primary': order.status === 'SHIPPED',
+                                            'bg-primary-subtle text-primary': order.status === 'SHIPPED' || order.status === 'OUT_FOR_DELIVERY',
                                             'bg-success-subtle text-success': order.status === 'DELIVERED',
                                             'bg-danger-subtle text-danger': order.status === 'CANCELLED',
                                             'bg-secondary-subtle text-secondary': order.status === 'RETURN_REQUESTED',

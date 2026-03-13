@@ -13,20 +13,25 @@ export class WalletService {
 
     constructor(private http: HttpClient) { }
 
+    private getHeaders() {
+        const userId = localStorage.getItem('userId');
+        return { headers: { 'X-User-Id': userId || '0' } };
+    }
+
     sendSmsOtp(mobileNumber: string): Observable<ApiResponse<string>> {
-        return this.http.post<ApiResponse<string>>(`${this.apiUrl}/kyc/send-sms`, { mobileNumber });
+        return this.http.post<ApiResponse<string>>(`${this.apiUrl}/kyc/send-sms`, { mobileNumber }, this.getHeaders());
     }
 
     verifyKyc(mobileNumber: string, otp: string): Observable<ApiResponse<Wallet>> {
-        return this.http.post<ApiResponse<Wallet>>(`${this.apiUrl}/kyc/verify`, { mobileNumber, otp });
+        return this.http.post<ApiResponse<Wallet>>(`${this.apiUrl}/kyc/verify`, { mobileNumber, otp }, this.getHeaders());
     }
 
     getBalance(): Observable<ApiResponse<Wallet>> {
-        return this.http.get<ApiResponse<Wallet>>(`${this.apiUrl}/balance`);
+        return this.http.get<ApiResponse<Wallet>>(`${this.apiUrl}/balance`, this.getHeaders());
     }
 
     createRazorpayOrder(amount: number): Observable<ApiResponse<string>> {
-        return this.http.post<ApiResponse<string>>(`${this.apiUrl}/create-razorpay-order`, { amount });
+        return this.http.post<ApiResponse<string>>(`${this.apiUrl}/create-razorpay-order`, { amount }, this.getHeaders());
     }
 
     verifyPayment(amount: number, razorpayPaymentId: string, razorpayOrderId: string, razorpaySignature: string): Observable<ApiResponse<Wallet>> {
@@ -36,10 +41,10 @@ export class WalletService {
             razorpayOrderId,
             razorpaySignature
         };
-        return this.http.post<ApiResponse<Wallet>>(`${this.apiUrl}/verify-payment`, payload);
+        return this.http.post<ApiResponse<Wallet>>(`${this.apiUrl}/verify-payment`, payload, this.getHeaders());
     }
 
     getTransactions(): Observable<ApiResponse<WalletTransaction[]>> {
-        return this.http.get<ApiResponse<WalletTransaction[]>>(`${this.apiUrl}/transactions`);
+        return this.http.get<ApiResponse<WalletTransaction[]>>(`${this.apiUrl}/transactions`, this.getHeaders());
     }
 }

@@ -36,17 +36,22 @@ export class CartComponent implements OnInit {
         }
     }
 
-    updateQuantity(cartItemId: number, quantity: number): void {
-        if (quantity < 1) return;
-        this.cartService.updateItemQuantity(cartItemId, quantity).subscribe({
-            next: () => this.loadCart()
-        });
+    updateQuantity(productId: number, quantity: number): void {
+        const userId = localStorage.getItem('userId');
+        if (userId && quantity >= 1) {
+            this.cartService.updateItemQuantity(Number(userId), productId, quantity).subscribe({
+                next: () => this.loadCart()
+            });
+        }
     }
 
-    removeItem(cartItemId: number): void {
-        this.cartService.removeItemFromCart(cartItemId).subscribe({
-            next: () => this.loadCart()
-        });
+    removeItem(productId: number): void {
+        const userId = localStorage.getItem('userId');
+        if (userId) {
+            this.cartService.removeItemFromCart(Number(userId), productId).subscribe({
+                next: () => this.loadCart()
+            });
+        }
     }
 
     clearCart(): void {

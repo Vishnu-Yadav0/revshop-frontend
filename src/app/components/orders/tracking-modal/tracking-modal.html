@@ -1,64 +1,83 @@
-<div class="modal fade show d-block" tabindex="-1" style="background: rgba(0,0,0,0.5); z-index: 1050;">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content rounded-4 border-0 shadow">
-            <div class="modal-header border-0 pb-0">
-                <h5 class="modal-title fw-bold text-dark">
-                    <i class="fa-solid fa-location-dot text-primary me-2"></i>
+<div class="tracking-overlay" (click)="onClose()">
+    <div class="tracking-drawer" (click)="$event.stopPropagation()">
+        
+        <!-- Header -->
+        <div class="drawer-header border-bottom">
+            <div class="d-flex justify-content-between align-items-center">
+                <h5 class="fw-bold text-dark mb-0 d-flex align-items-center gap-2">
+                    <div class="icon-circle bg-primary-subtle text-primary" style="width: 36px; height: 36px;">
+                        <i class="fa-solid fa-box-open fs-6"></i>
+                    </div>
                     Track Order #{{ orderNumber }}
                 </h5>
                 <button type="button" class="btn-close shadow-none" (click)="onClose()"></button>
             </div>
+        </div>
 
-            <div class="modal-body p-4">
-                <div *ngIf="loading" class="text-center py-4">
-                    <div class="spinner-border text-primary" role="status"></div>
-                    <p class="text-muted mt-2">Loading tracking details...</p>
+        <!-- Body -->
+        <div class="drawer-body p-4">
+            
+            <!-- Loading -->
+            <div *ngIf="loading" class="text-center py-5">
+                <div class="spinner-border text-primary" role="status"></div>
+                <p class="text-muted fw-medium mt-3">Loading tracking details...</p>
+            </div>
+
+            <!-- Error -->
+            <div *ngIf="error" class="alert alert-danger rounded-3 border-0 d-flex align-items-center gap-2" role="alert">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                Failed to load tracking details. Please try again.
+            </div>
+
+            <!-- Empty State -->
+            <div *ngIf="!loading && trackingDetails.length === 0" class="text-center py-5">
+                <div class="bg-light rounded-circle d-inline-flex p-4 mb-3">
+                    <i class="fa-solid fa-truck-fast fs-1 text-muted opacity-50"></i>
                 </div>
+                <h5 class="fw-bold text-dark">No Updates Yet</h5>
+                <p class="text-muted small">Tracking information will appear here once your order is processed.</p>
+            </div>
 
-                <div *ngIf="!loading && trackingDetails.length === 0" class="text-center py-4">
-                    <div class="bg-light rounded-circle d-inline-flex p-3 mb-3">
-                        <i class="fa-solid fa-rotate-left fs-3 text-primary"></i>
-                    </div>
-                    <p class="text-muted">No tracking updates available yet.</p>
-                </div>
-
-                <div *ngIf="!loading && trackingDetails.length > 0 && trackingDetails[0].shipperName"
-                    class="mb-4 p-3 bg-light rounded-3 border-start border-primary border-4">
-                    <div class="d-flex align-items-center">
-                        <div class="bg-primary bg-opacity-10 p-2 rounded-circle me-3">
-                            <i class="fa-solid fa-truck text-primary fs-5"></i>
+            <div *ngIf="!loading && trackingDetails.length > 0">
+                
+                <!-- Shipper Info -->
+                <div *ngIf="trackingDetails[0].shipperName" class="shipper-card mb-4">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="bg-primary bg-opacity-10 p-3 rounded-circle text-primary">
+                            <i class="fa-solid fa-truck fs-5"></i>
                         </div>
                         <div>
-                            <h6 class="mb-0 fw-bold text-dark">Assigned Shipper</h6>
-                            <p class="mb-0 text-muted small">{{ trackingDetails[0].shipperName }} • <span
-                                    class="badge bg-secondary opacity-75">{{ trackingDetails[0].vehicleNumber }}</span>
-                            </p>
+                            <p class="mb-0 text-muted small fw-medium text-uppercase tracking-wider">Assigned Shipper</p>
+                            <h6 class="mb-0 fw-bold text-dark">{{ trackingDetails[0].shipperName }} <span class="badge bg-secondary opacity-75 ms-1">{{ trackingDetails[0].vehicleNumber }}</span></h6>
                         </div>
                     </div>
                 </div>
 
-                <div *ngIf="!loading && trackingDetails.length > 0" class="timeline">
-                    <div *ngFor="let detail of trackingDetails; let i = index"
-                        class="timeline-item border-start ps-4 pb-4 position-relative">
-                        <div class="timeline-dot bg-primary rounded-circle position-absolute start-0 translate-middle-x"
-                            style="width: 12px; height: 12px; margin-left: -1px; top: 8px;"
-                            [class.bg-success]="i === 0"></div>
-                        <div class="timeline-content">
-                            <h6 class="fw-bold mb-1" [class.text-success]="i === 0">{{ detail.status }}</h6>
-                            <p class="text-muted small mb-1">{{ detail.description }}</p>
-                            <span class="text-muted x-small d-block">{{ detail.updatedAt | date:'medium' }}</span>
+                <!-- Timeline -->
+                <h6 class="fw-bold text-dark mb-3">Tracking History</h6>
+                <div class="tracking-history-timeline">
+                    <div *ngFor="let detail of trackingDetails; let i = index" class="timeline-step">
+                        
+                        <!-- The vertical line & dot -->
+                        <div class="timeline-indicator">
+                            <div class="dot" [class.dot-active]="i === 0"></div>
+                            <div class="line" *ngIf="i !== trackingDetails.length - 1"></div>
                         </div>
+                        
+                        <!-- Content -->
+                        <div class="timeline-content pb-4">
+                            <div class="d-flex justify-content-between align-items-start mb-1">
+                                <h6 class="fw-bold mb-0" [class.text-primary]="i === 0" [class.text-dark]="i !== 0">{{ detail.status }}</h6>
+                                <span class="text-muted x-small" style="white-space: nowrap;">{{ detail.updatedAt | date:'MMM d, h:mm a' }}</span>
+                            </div>
+                            <p class="text-muted small mb-0 mt-1">{{ detail.description }}</p>
+                        </div>
+
                     </div>
                 </div>
 
-                <div *ngIf="error" class="alert alert-danger rounded-3" role="alert">
-                    Failed to load tracking details. Please try again later.
-                </div>
             </div>
 
-            <div class="modal-footer border-0">
-                <button class="btn btn-light rounded-pill px-4" (click)="onClose()">Close</button>
-            </div>
         </div>
     </div>
 </div>
