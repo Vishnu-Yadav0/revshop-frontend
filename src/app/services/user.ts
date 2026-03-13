@@ -30,7 +30,7 @@ export class UserService {
     }
 
     updateProfile(id: number, userData: UserDTO): Observable<ApiResponse<UserDTO>> {
-        return this.http.put<ApiResponse<UserDTO>>(`${this.apiUrl}/${id}/profile`, userData);
+        return this.http.put<ApiResponse<UserDTO>>(`${this.apiUrl}/${id}`, userData);
     }
 
     updatePassword(id: number, request: PasswordUpdateRequest): Observable<ApiResponse<void>> {
@@ -38,10 +38,10 @@ export class UserService {
     }
 
     deactivateAccount(id: number): Observable<ApiResponse<void>> {
-        return this.http.patch<ApiResponse<void>>(`${this.apiUrl}/${id}/deactivate`, {});
+        return this.http.put<ApiResponse<void>>(`${this.apiUrl}/${id}/deactivate`, {});
     }
 
     deleteAccount(id: number): Observable<ApiResponse<void>> {
-        return this.http.delete<ApiResponse<void>>(`${this.apiUrl}/${id}/delete`);
+        return this.http.delete<ApiResponse<void>>(`${this.apiUrl}/${id}`);
     }
 }

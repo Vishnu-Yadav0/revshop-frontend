@@ -64,11 +64,11 @@ export class ShipperService {
     }
 
     loginShipper(email: string, password: string): Observable<ApiResponse<any>> {
-        return this.http.post<ApiResponse<any>>(`${this.authUrl}/login/shipper`, { email, password });
+        return this.http.post<ApiResponse<any>>(`${this.apiUrl}/login`, { email, password });
     }
 
     registerShipper(data: { name: string; email: string; phone: string; vehicleNumber: string; password: string }): Observable<ApiResponse<any>> {
-        return this.http.post<ApiResponse<any>>(`${this.authUrl}/register/shipper`, data);
+        return this.http.post<ApiResponse<any>>(`${this.apiUrl}`, data);
     }
 
     getOrdersByShipper(shipperId: number): Observable<ApiResponse<ShipperOrder[]>> {

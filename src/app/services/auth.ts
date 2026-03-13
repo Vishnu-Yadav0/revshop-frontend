@@ -39,11 +39,11 @@ export class AuthService {
   }
 
   loginBuyer(credentials: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/login/buyer`, credentials);
+    return this.http.post(`${this.apiUrl}/login`, credentials);
   }
 
   loginSeller(credentials: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/login/seller`, credentials);
+    return this.http.post(`${this.apiUrl}/login`, credentials);
   }
 
   reactivate(credentials: any): Observable<any> {

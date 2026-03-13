@@ -9,7 +9,7 @@ import { ApiResponse } from '../models/api-response.model';
 })
 export class WalletService {
 
-    private apiUrl = 'http://localhost:8080/api/wallets';
+    private apiUrl = '/api/wallets';
 
     constructor(private http: HttpClient) { }
 
