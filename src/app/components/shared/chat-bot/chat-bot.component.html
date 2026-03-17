@@ -1,0 +1,48 @@
+<!-- Chat Trigger Button -->
+<button class="chat-trigger" (click)="toggleChat()" [class.hidden]="isOpen">
+  <span class="chat-icon"><i class="fa-solid fa-comments"></i></span>
+  <span class="chat-label">Ask RevAI</span>
+</button>
+
+<!-- Chat Window -->
+<div class="chat-window" [class.open]="isOpen">
+  <div class="chat-header">
+    <div class="header-info">
+      <div class="bot-avatar"><i class="fa-solid fa-robot"></i></div>
+      <div class="bot-details">
+        <h3>RevShop AI</h3>
+        <span class="status">Online</span>
+      </div>
+    </div>
+    <button class="close-btn" (click)="toggleChat()"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+
+  <div class="chat-messages" #scrollMe>
+    <div *ngFor="let msg of messages" [class]="'message ' + msg.sender">
+      <div class="message-content">
+        {{ msg.text }}
+        <span class="timestamp">{{ msg.timestamp | date:'shortTime' }}</span>
+      </div>
+    </div>
+    <div *ngIf="isLoading" class="message bot loading">
+      <div class="message-content">
+        <div class="typing-indicator">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="chat-input-area">
+    <input 
+      type="text" 
+      [(ngModel)]="userInput" 
+      (keyup.enter)="sendMessage()" 
+      placeholder="Type your message..."
+      [disabled]="isLoading"
+    />
+    <button (click)="sendMessage()" [disabled]="!userInput.trim() || isLoading">
+      <span class="send-icon"><i class="fa-solid fa-paper-plane"></i></span>
+    </button>
+  </div>
+</div>

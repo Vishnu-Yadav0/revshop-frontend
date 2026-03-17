@@ -10,10 +10,11 @@ import { AuthService } from './services/auth';
 
 import { LocationPopupComponent } from './components/shared/location-popup/location-popup';
 import { ThemeService } from './services/theme.service';
+import { ChatBotComponent } from './components/shared/chat-bot/chat-bot.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, HttpClientModule, ReactiveFormsModule, CommonModule, ToastComponent, Navbar, LocationPopupComponent],
+  imports: [RouterOutlet, HttpClientModule, ReactiveFormsModule, CommonModule, ToastComponent, Navbar, LocationPopupComponent, ChatBotComponent],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
