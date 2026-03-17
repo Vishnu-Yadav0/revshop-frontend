@@ -20,6 +20,8 @@ import { ProductEditComponent } from './components/products/product-edit/product
 import { ShipperLoginComponent } from './components/shipper-login/shipper-login';
 import { ShipperDashboardComponent } from './components/shipper-dashboard/shipper-dashboard';
 import { ShipperRegisterComponent } from './components/shipper-register/shipper-register';
+import { ShipperForgotPasswordComponent } from './components/shipper-forgot-password/shipper-forgot-password';
+import { ShipperResetPasswordComponent } from './components/shipper-reset-password/shipper-reset-password';
 import { WalletComponent } from './components/user/wallet/wallet';
 import { ResetPasswordComponent } from './components/reset-password/reset-password';
 import { AboutComponent } from './components/about/about';
@@ -34,6 +36,8 @@ export const routes: Routes = [
   { path: 'shipper-login', component: ShipperLoginComponent },
   { path: 'shipper-register', component: ShipperRegisterComponent },
   { path: 'shipper-dashboard', component: ShipperDashboardComponent },
+  { path: 'shipper-forgot-password', component: ShipperForgotPasswordComponent },
+  { path: 'shipper-reset-password', component: ShipperResetPasswordComponent },
   { path: 'dashboard', component: DashboardComponent, canActivate: [authGuard] },
   { path: 'buyer-dashboard', component: BuyerDashboardComponent, canActivate: [authGuard] },
   { path: 'seller-dashboard', component: SellerDashboardComponent, canActivate: [authGuard] },

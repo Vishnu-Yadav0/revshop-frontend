@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractContro
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ShipperService } from '../../services/shipper.service';
+import { AuthService } from '../../services/auth';
 import { ApiResponse } from '../../models/api-response.model';
 import { ToastService } from '../../services/toast';
 
@@ -32,9 +33,14 @@ export class ShipperRegisterComponent {
     showPassword = false;
     showConfirm = false;
 
+    // OTP state
+    otpSent = false;
+    otpVerified = false;
+
     constructor(
         private fb: FormBuilder,
         private shipperService: ShipperService,
+        private authService: AuthService,
         private router: Router,
         private toastService: ToastService
     ) {
@@ -44,7 +50,8 @@ export class ShipperRegisterComponent {
             phone: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
             vehicleNumber: ['', [Validators.required]],
             password: ['', [Validators.required, Validators.minLength(6)]],
-            confirmPassword: ['', Validators.required]
+            confirmPassword: ['', Validators.required],
+            otp: ['']
         }, { validators: passwordMatchValidator });
     }
 
@@ -55,7 +62,59 @@ export class ShipperRegisterComponent {
         this.errorMessage = '';
         this.successMessage = '';
 
-        if (this.form.invalid) return;
+        // Step 1: Send OTP — only email field needs to be valid
+        if (!this.otpSent) {
+            const emailControl = this.form.get('email');
+            if (!emailControl || emailControl.invalid) {
+                this.toastService.error('Please enter a valid email address first.');
+                return;
+            }
+            this.loading = true;
+            this.authService.sendOtp(emailControl.value).subscribe({
+                next: () => {
+                    this.otpSent = true;
+                    this.loading = false;
+                    this.toastService.success('OTP sent! Please check your email.');
+                    this.form.get('otp')?.setValidators([Validators.required, Validators.pattern('^[0-9]{6}$')]);
+                    this.form.get('otp')?.updateValueAndValidity();
+                },
+                error: (err) => {
+                    this.loading = false;
+                    this.errorMessage = err.error?.message || 'Failed to send OTP. Please try again.';
+                    this.toastService.error(this.errorMessage);
+                }
+            });
+            return;
+        }
+
+        // Step 2: Verify OTP
+        if (!this.otpVerified) {
+            const otp = this.form.get('otp')?.value;
+            if (!otp || otp.length !== 6) {
+                this.toastService.error('Please enter the 6-digit OTP sent to your email.');
+                return;
+            }
+            this.loading = true;
+            this.authService.verifyOtp(this.form.get('email')?.value, otp).subscribe({
+                next: () => {
+                    this.otpVerified = true;
+                    this.loading = false;
+                    this.toastService.success('Email verified! Please complete your registration.');
+                },
+                error: (err) => {
+                    this.loading = false;
+                    this.errorMessage = err.error?.message || 'Invalid or expired OTP.';
+                    this.toastService.error(this.errorMessage);
+                }
+            });
+            return;
+        }
+
+        // Step 3: Full form validation then register
+        if (this.form.invalid) {
+            this.toastService.error('Please fill in all required fields before registering.');
+            return;
+        }
 
         this.loading = true;
         const { name, email, phone, vehicleNumber, password } = this.form.value;
@@ -78,6 +137,15 @@ export class ShipperRegisterComponent {
                 this.toastService.error(this.errorMessage);
                 this.loading = false;
             }
+        });
+    }
+
+    resendOtp(): void {
+        const email = this.form.get('email')?.value;
+        if (!email) return;
+        this.authService.sendOtp(email).subscribe({
+            next: () => this.toastService.success('OTP resent! Please check your email.'),
+            error: () => this.toastService.error('Failed to resend OTP.')
         });
     }
 }

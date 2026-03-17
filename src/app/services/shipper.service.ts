@@ -90,4 +90,12 @@ export class ShipperService {
             { params: { available: available.toString() } }
         );
     }
+
+    shipperForgotPassword(email: string): Observable<ApiResponse<string>> {
+        return this.http.post<ApiResponse<string>>(`${this.apiUrl}/forgot-password`, { email });
+    }
+
+    shipperResetPassword(token: string, newPassword: string): Observable<ApiResponse<string>> {
+        return this.http.post<ApiResponse<string>>(`${this.apiUrl}/reset-password`, { token, newPassword });
+    }
 }

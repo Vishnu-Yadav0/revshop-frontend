@@ -72,12 +72,37 @@
                             <div class="input-wrap">
                                 <span class="input-prefix">📧</span>
                                 <input type="email" formControlName="email" placeholder="rajesh@example.com"
-                                    autocomplete="email">
+                                    autocomplete="email" [readonly]="otpSent">
                             </div>
                             @if (submitted && f['email'].invalid) {
                             <span class="err">Enter a valid email address</span>
                             }
+                            @if (otpVerified) {
+                            <span style="color:#198754;font-size:0.82rem;margin-top:4px;display:block;">✅ Email verified</span>
+                            }
                         </div>
+
+                        <!-- OTP Input (shown after OTP sent) -->
+                        @if (otpSent && !otpVerified) {
+                        <div class="form-group full-width" [class.error]="submitted && f['otp'].invalid">
+                            <label>Email Verification OTP</label>
+                            <div class="input-wrap">
+                                <span class="input-prefix">🔑</span>
+                                <input type="text" formControlName="otp" placeholder="Enter 6-digit OTP"
+                                    maxlength="6" autocomplete="one-time-code">
+                            </div>
+                            @if (submitted && f['otp'].invalid) {
+                            <span class="err">Please enter the 6-digit OTP sent to your email</span>
+                            }
+                            <span style="font-size:0.82rem;color:#6c757d;margin-top:4px;display:block;">
+                                Didn't receive it?
+                                <button type="button" (click)="resendOtp()"
+                                    style="background:none;border:none;color:#0d6efd;cursor:pointer;padding:0;font-size:0.82rem;text-decoration:underline;">
+                                    Resend OTP
+                                </button>
+                            </span>
+                        </div>
+                        }
 
                         <!-- Phone -->
                         <div class="form-group" [class.error]="submitted && f['phone'].invalid">
@@ -139,9 +164,10 @@
 
                     <button type="submit" class="submit-btn" [disabled]="loading">
                         @if (loading) {
-                        <span class="spinner"></span> Creating Account...
+                        <span class="spinner"></span>
+                        {{ !otpSent ? 'Sending OTP...' : !otpVerified ? 'Verifying...' : 'Creating Account...' }}
                         } @else {
-                        🚀 Create Shipper Account
+                        {{ !otpSent ? '📧 Send Verification OTP' : !otpVerified ? '✅ Verify OTP' : '🚀 Create Shipper Account' }}
                         }
                     </button>
                 </form>
@@ -153,4 +179,4 @@
             </div>
         </div>
     </div>
-</div>
+</div>

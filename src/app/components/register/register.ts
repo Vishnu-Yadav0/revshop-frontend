@@ -85,13 +85,15 @@ export class RegisterComponent implements OnInit {
     this.submitted = true;
     this.errorMessage = '';
 
-    if (this.registerForm.invalid) {
-      return;
-    }
-
+    // Step 1: Send OTP — only email field needs to be valid
     if (!this.otpSent) {
+      const emailControl = this.registerForm.get('email');
+      if (!emailControl || emailControl.invalid) {
+        this.toastService.error('Please enter a valid email address first.');
+        return;
+      }
       this.loading = true;
-      this.authService.sendOtp(this.registerForm.get('email')?.value).subscribe({
+      this.authService.sendOtp(emailControl.value).subscribe({
         next: () => {
           this.otpSent = true;
           this.loading = false;
@@ -101,20 +103,26 @@ export class RegisterComponent implements OnInit {
         },
         error: (err) => {
           this.loading = false;
-          this.errorMessage = err.error?.message || 'Failed to send OTP';
+          this.errorMessage = err.error?.message || 'Failed to send OTP. Please try again.';
           this.toastService.error(this.errorMessage);
         }
       });
       return;
     }
 
+    // Step 2: Verify OTP — only email + otp fields need to be valid
     if (!this.otpVerified) {
+      const otp = this.registerForm.get('otp')?.value;
+      if (!otp || otp.length !== 6) {
+        this.toastService.error('Please enter the 6-digit OTP sent to your email.');
+        return;
+      }
       this.loading = true;
-      this.authService.verifyOtp(this.registerForm.get('email')?.value, this.registerForm.get('otp')?.value).subscribe({
+      this.authService.verifyOtp(this.registerForm.get('email')?.value, otp).subscribe({
         next: () => {
           this.otpVerified = true;
+          this.loading = false;
           this.toastService.success('OTP verified successfully!');
-          this.proceedWithRegistration();
         },
         error: (err) => {
           this.loading = false;
@@ -122,6 +130,12 @@ export class RegisterComponent implements OnInit {
           this.toastService.error(this.errorMessage);
         }
       });
+      return;
+    }
+
+    // Step 3: Final registration — now validate the full form
+    if (this.registerForm.invalid) {
+      this.toastService.error('Please fill in all required fields before registering.');
       return;
     }
 
