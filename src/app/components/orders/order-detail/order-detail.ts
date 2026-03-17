@@ -73,7 +73,7 @@ export class OrderDetailComponent implements OnInit {
         this.orderService.getOrderTracking(this.orderId).subscribe({
             next: (trackingRes: ApiResponse<any[]>) => {
                 const sorted = (trackingRes.data || []).slice().sort(
-                    (a: any, b: any) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+                    (a: any, b: any) => new Date(b.updatedAt || b.createdAt).getTime() - new Date(a.updatedAt || a.createdAt).getTime()
                 );
                 this.trackingHistory.set(sorted);
                 this.trackingLoading.set(false);

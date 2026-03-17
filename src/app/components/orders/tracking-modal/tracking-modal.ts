@@ -29,7 +29,10 @@ export class TrackingModalComponent implements OnInit {
     this.loading = true;
     this.trackingService.getTrackingDetails(this.orderId).subscribe({
       next: (res: any) => {
-        this.trackingDetails = res.data || [];
+        const sorted = (res.data || []).slice().sort(
+          (a: any, b: any) => new Date(b.updatedAt || b.createdAt).getTime() - new Date(a.updatedAt || a.createdAt).getTime()
+        );
+        this.trackingDetails = sorted;
         this.loading = false;
       },
       error: () => {

@@ -20,15 +20,17 @@
         <div class="row g-4" *ngIf="!loading() && favorites().length > 0">
             <div class="col-md-6 col-lg-4" *ngFor="let item of favorites()">
                 <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden favorite-card">
-                    <div class="p-4 text-center bg-light position-relative">
-                        <i class="fa-solid fa-box fs-1 text-primary"></i>
+                    <div class="p-0 text-center bg-light position-relative" style="height: 200px;">
+                        <img [src]="item.productDetails?.imageUrl || 'assets/placeholder.png'" 
+                             class="w-100 h-100 object-fit-cover" 
+                             alt="{{ item.productDetails?.name }}">
                         <button class="btn btn-danger btn-sm rounded-circle position-absolute top-0 end-0 m-3"
                             (click)="removeFavorite(item.productId)">
                             <i class="fa-solid fa-xmark"></i>
                         </button>
                     </div>
                     <div class="card-body p-4">
-                        <h5 class="fw-bold mb-1">{{ item.productName }}</h5>
+                        <h5 class="fw-bold mb-1">{{ item.productDetails?.name }}</h5>
                         <div class="d-flex gap-2 mt-3">
                             <a [routerLink]="['/product', item.productId]"
                                 class="btn btn-outline-primary rounded-pill flex-grow-1">

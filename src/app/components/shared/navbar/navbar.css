@@ -146,6 +146,7 @@
     cursor: pointer;
     background-color: #fff;
     transition: background-color 0.2s ease;
+    white-space: normal !important;
 }
 .notification-item a:hover {
     background-color: #f8fafc;
@@ -185,18 +186,15 @@
 .notification-title {
     color: #1e293b;
     font-size: 0.9rem;
+    white-space: normal;
 }
 
 .notification-message {
     color: #475569;
     font-size: 0.85rem;
     line-height: 1.4;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    word-wrap: break-word;
+    white-space: normal;
 }
 
 .notification-time {

@@ -40,7 +40,7 @@ export class OrderService {
     }
 
     getOrderTracking(orderId: number): Observable<ApiResponse<any[]>> {
-        return this.http.get<ApiResponse<any[]>>(`/api/tracking/order/${orderId}`);
+        return this.http.get<ApiResponse<any[]>>(`${this.apiUrl}/${orderId}/tracking`);
     }
 
     getOrdersByUserId(userId: number): Observable<ApiResponse<OrderResponseDTO[]>> {

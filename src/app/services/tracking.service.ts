@@ -11,6 +11,6 @@ export class TrackingService {
     constructor(private http: HttpClient) { }
 
     getTrackingDetails(orderId: number): Observable<ApiResponse<TrackingDetail[]>> {
-        return this.http.get<ApiResponse<TrackingDetail[]>>(`/api/tracking/order/${orderId}`);
+        return this.http.get<ApiResponse<TrackingDetail[]>>(`${this.baseUrl}/${orderId}/tracking`);
     }
 }
