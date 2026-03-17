@@ -15,9 +15,23 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
             let errorMessage = 'An unexpected error occurred';
 
             if (error.status === 401) {
-                authService.logout();
-                router.navigate(['/login']);
-                errorMessage = 'Session expired. Please login again.';
+                // Skip auto-redirect for login attempts to allow showing "Invalid credentials"
+                const isLoginRequest = req.url.includes('/api/auth/login') || req.url.includes('/api/shippers/login');
+                
+                if (!isLoginRequest) {
+                    const role = localStorage.getItem('role');
+                    authService.logout();
+                    
+                    // Redirect based on role context
+                    if (role === 'SHIPPER' || router.url.includes('shipper')) {
+                        router.navigate(['/shipper-login']);
+                    } else {
+                        router.navigate(['/login']);
+                    }
+                    errorMessage = 'Session expired. Please login again.';
+                } else {
+                    errorMessage = 'Invalid credentials. Please try again.';
+                }
             } else if (error.error instanceof ErrorEvent) {
                 errorMessage = `Error: ${error.error.message}`;
             } else {
