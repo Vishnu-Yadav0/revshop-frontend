@@ -43,12 +43,12 @@ export class AiChatService {
             const lines = chunk.split('\n');
             lines.forEach(line => {
               if (line.startsWith('data:')) {
-                // Remove only the "data:" prefix (and one optional protocol space).
-                // DO NOT .trim() the whole content — Ollama sends tokens with leading
-                // spaces as word separators (e.g. " for", " a"). Trimming removes them
-                // and causes words to be concatenated without spaces.
-                const raw = line.substring(5); // drops "data:"
-                const content = raw.startsWith(' ') ? raw.substring(1) : raw; // drop one protocol space
+                // Strip "data:" prefix only — the remaining content (including any
+                // leading space) is exactly the token from Ollama.
+                // Ollama sends word-separator spaces as the first character of a token
+                // e.g. "data: world" → token is " world" (space + word).
+                // We must NOT strip that space or words will merge together.
+                const content = line.substring(5);
                 if (content) observer.next(content);
               } else if (line.trim() && !line.startsWith(':')) {
                 // Raw text (not SSE format) — safe to use as-is

@@ -4,6 +4,7 @@ import { FeaturedCategories } from './featured-categories/featured-categories';
 import { FeaturedProducts } from './featured-products/featured-products';
 import { Header } from '../shared/header/header';
 import { Footer } from '../shared/footer/footer';
+import { ChatBotComponent } from '../shared/chat-bot/chat-bot.component';
 
 @Component({
   selector: 'app-landing-page',
@@ -13,7 +14,8 @@ import { Footer } from '../shared/footer/footer';
     FeaturedCategories,
     FeaturedProducts,
     Header,
-    Footer
+    Footer,
+    ChatBotComponent
   ],
   templateUrl: './landing-page.html',
   styleUrl: './landing-page.css',
